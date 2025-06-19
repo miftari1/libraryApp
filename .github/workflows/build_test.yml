@@ -24,6 +24,10 @@ jobs:
       run: npm install
     - name: Install Playwright
       run: npx playwright install
+    - name: Run server
+      run: npm run server
+    - name: Run app
+      run: cd server && node server.js
     - name: Run tests
       run: npm test
       

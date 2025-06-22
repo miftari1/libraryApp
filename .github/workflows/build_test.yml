@@ -31,14 +31,26 @@ jobs:
     - name: Run tests
       run: npm test
       
-  deploy:
+  deploy-be:
     needs: build_test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Deploy to production
+      - name: Deploy backend to production
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
-          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+          service-id: ${{ secrets.BE_SERVICE_ID }}
+          api-key: ${{ secrets.MY_RENDER_API_KEY }}
+          wait-for-success: true
+
+  deploy-fe:
+    needs: deploy-be
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy frontend to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.FE_SERVICE_ID }}
           api-key: ${{ secrets.MY_RENDER_API_KEY }}
           wait-for-success: true
